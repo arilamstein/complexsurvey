@@ -21,6 +21,7 @@ state.id <- read.csv("https://raw.githubusercontent.com/tyokota/complexsurvey/ma
 ageg65yr.id <- read.csv("https://raw.githubusercontent.com/tyokota/complexsurvey/master/ageg65yr.csv", stringsAsFactors=F)
 
 # ANALYSIS----------------------------------------------------------------------
+
 brfss.design14 <- brfss14 %>%
   as_survey_design(ids=X_PSU, weight=X_LLCPWT, nest=TRUE, strata=X_STSTR, variables= c(X_BMI5CAT, X_MRACE1, X_STATE))
 
@@ -46,9 +47,7 @@ brfss.design14 %>%
 BMI5CAT2.1 <- brfss.design14 %>%
   group_by(X_STATE, X_BMI5CAT2) %>%
   summarize(prevalence = survey_mean(na.rm=T),
-            N = survey_total(na.rm=T))
-
-BMI5CAT2.1 <- BMI5CAT2.1 %>%
+            N = survey_total(na.rm=T)) %>%
   mutate(X_STATE = as.character(X_STATE)) %>%
   left_join(state.id, by=c("X_STATE"="VALUE"))
 
