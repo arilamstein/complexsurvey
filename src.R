@@ -21,24 +21,21 @@ state.id <- read.csv("https://raw.githubusercontent.com/tyokota/complexsurvey/ma
 ageg65yr.id <- read.csv("https://raw.githubusercontent.com/tyokota/complexsurvey/master/ageg65yr.csv", stringsAsFactors=F)
 
 # ANALYSIS----------------------------------------------------------------------
-brfss14 <- brfss14 %>%
-  mutate(X_BMI5CAT2 = car::recode(X_BMI5CAT, "c(3,4)=1; NA=NA;  else=0"))
-
-# survey object to validate against CDC
-brfss.design14.0 <- brfss14 %>%
-  as_survey_design(ids=X_PSU, weight=X_LLCPWT, nest=TRUE, strata=X_STSTR, variables= c(X_BMI5CAT, X_MRACE1, X_STATE))
-
 brfss.design14 <- brfss14 %>%
   as_survey_design(ids=X_PSU, weight=X_LLCPWT, nest=TRUE, strata=X_STSTR, variables= c(X_BMI5CAT, X_MRACE1, X_STATE))
+
+brfss.design14 <- brfss.design14 %>%
+  mutate(X_BMI5CAT2 = car::recode(X_BMI5CAT, "c(3,4)=1; NA=NA;  else=0"),
+         X_BMI5CAT=as.factor(X_BMI5CAT))
 
 options(survey.lonely.psu = "certainty")
 # options(survey.lonely.psu = "adjust")
 
 # validate against CDC
-brfss.design14.0 <- brfss.design14.0 %>%
-  mutate(X_BMI5CAT=as.factor(X_BMI5CAT))
+brfss.design14 <- brfss.design14 %>%
+  mutate()
 
-brfss.design14.0 %>%
+brfss.design14 %>%
   filter(X_STATE==15) %>%
   group_by(X_STATE, X_BMI5CAT) %>%
   summarize(prevalence = survey_mean(na.rm=T, vartype = c("ci")),
@@ -46,9 +43,6 @@ brfss.design14.0 %>%
 # matches CDC tool
 
 # by state
-brfss.design14 <- brfss.design14 %>%
-  mutate(X_BMI5CAT2=as.factor(X_BMI5CAT2))
-
 BMI5CAT2.1 <- brfss.design14 %>%
   group_by(X_STATE, X_BMI5CAT2) %>%
   summarize(prevalence = survey_mean(na.rm=T),
