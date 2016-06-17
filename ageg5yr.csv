@@ -1,6 +1,6 @@
 VALUE                                                                                                                                                                              ,X_AGEG5YR   
-           .D                  ,    DK/NS                                                                                                                                                        
-           .R                  ,    REFUSED                                                                                                                                                      
+.D,DK/NS
+.R,REFUSED
 1,Age 18 to 24
 2,Age 25 to 29
 3,Age 30 to 34
@@ -14,4 +14,4 @@ VALUE                                                                           
 11,Age 70 to 74
 12,Age 75 to 79
 13,Age 80 or older
-14,Don’t know/Refused/Missing
+14,Dont know/Refused/Missing
