@@ -21,7 +21,6 @@ state.id <- read.csv("https://raw.githubusercontent.com/tyokota/complexsurvey/ma
 ageg65yr.id <- read.csv("https://raw.githubusercontent.com/tyokota/complexsurvey/master/ageg65yr.csv", stringsAsFactors=F)
 
 # ANALYSIS----------------------------------------------------------------------
-
 brfss.design14 <- brfss14 %>%
   as_survey_design(ids=X_PSU, weight=X_LLCPWT, nest=TRUE, strata=X_STSTR, variables= c(X_BMI5CAT, X_MRACE1, X_STATE))
 
@@ -33,9 +32,6 @@ options(survey.lonely.psu = "certainty")
 # options(survey.lonely.psu = "adjust")
 
 # validate against CDC
-brfss.design14 <- brfss.design14 %>%
-  mutate()
-
 brfss.design14 %>%
   filter(X_STATE==15) %>%
   group_by(X_STATE, X_BMI5CAT) %>%
@@ -80,10 +76,11 @@ brfss14a <- brfss14 %>%
   filter(X_STATE==15)
 
 brfss.design14a <- brfss14a %>%
-  as_survey_design(ids=X_PSU, weight=X_LLCPWT, nest=TRUE, strata=X_STSTR, variables= c(X_BMI5CAT2, X_MRACE1, X_STATE, X_AGEG5YR))
+  as_survey_design(ids=X_PSU, weight=X_LLCPWT, nest=TRUE, strata=X_STSTR, variables= c(X_BMI5CAT, X_MRACE1, X_STATE, X_AGEG5YR))
 
 brfss.design14a <- brfss.design14a %>%
-  mutate(X_BMI5CAT2a=car::recode(X_BMI5CAT2, "1='Obese/overweight'; NA=NA; else='Not Obese/overweight'"),
+  mutate(X_BMI5CAT2 = car::recode(X_BMI5CAT, "c(3,4)=1; NA=NA;  else=0"),
+         X_BMI5CAT2a=car::recode(X_BMI5CAT2, "1='Obese/overweight'; NA=NA; else='Not Obese/overweight'"),
          X_BMI5CAT2a=factor(X_BMI5CAT2a, levels=c('Obese/overweight', 'Not Obese/overweight'), ordered=TRUE),
          X_MRACE1a=car::recode(X_MRACE1, "1='White'; 2='Black'; 3='AIAN'; 4='Asian'; 5='NHOPI';  NA=NA; c(6,7)='other/multiracial'; else=NA"),
          X_AGEG5YR=as.factor(X_AGEG5YR))
