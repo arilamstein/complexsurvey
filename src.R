@@ -2,7 +2,7 @@
 
 # DEPENDENCIES -----------------------------------------------------------------
 install.packages('pacman')
-pacman::p_load(RCurl, foreign, downloader, survey, srvyr, ggplot2, dplyr)
+pacman::p_load(RCurl, foreign, downloader, survey, srvyr, ggplot2, dplyr, car, choroplethr, choroplethrMaps)
 
 # DATA -------------------------------------------------------------------------
 source_url("https://raw.githubusercontent.com/ajdamico/asdfree/master/Download%20Cache/download%20cache.R", prompt=F, echo=F)
